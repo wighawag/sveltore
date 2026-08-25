@@ -1,25 +1,81 @@
 {
   "name": "sveltore",
-  "version": "0.0.2",
-  "description": "svelte store package (copied from svelte)",
+  "version": "1.0.0",
+  "description": "Svelte's store implementation as a standalone, dependency-free package, for libraries that want svelte stores without depending on svelte",
+  "keywords": [
+    "svelte",
+    "store",
+    "stores",
+    "svelte-store",
+    "svelte-stores",
+    "writable",
+    "readable",
+    "derived",
+    "observable",
+    "reactive",
+    "state"
+  ],
+  "homepage": "https://github.com/wighawag/sveltore#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wighawag/sveltore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wighawag/sveltore/issues"
+  },
+  "author": "Ronan Sandford",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      },
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "files": [
+    "dist",
+    "src",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@11.15.1",
   "volta": {
-    "node": "18.7.0"
+    "node": "22.22.0"
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/node": "^18.6.2",
-    "tsup": "^6.2.1",
-    "typescript": "^4.7.4"
+    "@types/node": "^22.13.0",
+    "prettier": "^3.5.3",
+    "svelte": "^5.25.12",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup-node src/index.ts --dts --format esm,cjs"
+    "build": "tsup-node src/index.ts --dts --format esm,cjs --clean",
+    "test": "vitest run && pnpm test:types",
+    "test:watch": "vitest",
+    "test:types": "tsc --noEmit",
+    "bench": "node bench/finally-overhead.mjs && node --allow-natives-syntax bench/v8-optimization-status.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepublishOnly": "pnpm run build && pnpm run test"
   }
 }
